@@ -1,6 +1,8 @@
 package com.sapient.weather.predicator.weatherservice;
 
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import com.sapient.weather.predicator.model.Response;
 import com.sapient.weather.predicator.model.Wresponse;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +31,7 @@ public class WeatherService {
             final String baseUrl = HTTPS_SAMPLES_OPENWEATHERMAP_ORG_DATA_2_5_FORECAST_Q + cityName + ",us&&appid=b6907d289e10d714a6e88b30761fae22";
             URI uri = new URI(baseUrl);
 
-            Response response = restTemplate.getForObject(uri, Response.class);
+            Response response = getResponse(restTemplate, uri);
 
             java.util.List<com.sapient.weather.predicator.model.List> mains = response.getList();
 
@@ -66,6 +68,19 @@ public class WeatherService {
            log.error(" error is raised while calling rest api");
         }
         return null;
+    }
+
+    @HystrixCommand(fallbackMethod = "stubMyService",
+            commandProperties = {
+                    @HystrixProperty(name="execution.isolation.strategy", value="SEMAPHORE")
+            }
+    )
+    private Response getResponse(RestTemplate restTemplate, URI uri) {
+        return restTemplate.getForObject(uri, Response.class);
+    }
+
+    private  Response downServer(){
+        return  new Response();
     }
 
 }

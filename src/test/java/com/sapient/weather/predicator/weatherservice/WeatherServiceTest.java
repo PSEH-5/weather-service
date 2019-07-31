@@ -17,13 +17,31 @@ public class WeatherServiceTest {
     WeatherService weatherService;
 
     @Test
-    public void testGetWeatherCity(){
+    public void testGetWeatherCity() {
 
 
         Wresponse s = weatherService.getCityWeahter("London");
-        System.out.println("s = " + s);
 
         Assert.assertNotNull(s);
+
+
+    }
+
+    @Test
+    public void testGetWeatherCity2() {
+
+
+        Wresponse s = weatherService.getCityWeahter(null);
+
+
+
+    }
+
+    @Test
+    public void testGetWeatherCity3() {
+
+
+        Wresponse s = weatherService.getCityWeahter("");
 
 
 
