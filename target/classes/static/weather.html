@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+
+    <script>
+
+
+        function submitForm() {
+            var cityName = document.getElementById("city").value;
+
+
+            var url = 'http://localhost:8080/get/weather/' +cityName;
+            $.ajax(
+                {
+                    type: "GET",
+                    url: url,
+                    headers: {  'Access-Control-Allow-Origin': '*' },
+                    crossDomain: true,
+                    success: function (data) {
+                        //data = JSON.parse(data)
+                        alert(data);
+                    },
+                    error: function (xhr, statusText, err) {
+                        alert("error" + xhr.status);
+                    }
+                });
+        }
+
+
+    </script>
+    <meta charset="UTF-8">
+    <title>weather</title>
+</head>
+<body>
+
+<h1>Weather </h1>
+
+<form>
+    <input type="text" name="city" id="city"/>
+    <input type="button" value="Submit" onclick="submitForm()">
+</form>
+
+<div id="reset">
+
+
+</div>
+
+</body>
+</html>
